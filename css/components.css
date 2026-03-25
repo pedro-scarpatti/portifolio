@@ -1,0 +1,218 @@
+/* ============================================
+   COMPONENT STYLES - Botões, cards, etc
+   ============================================ */
+
+/* Botões */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--border-radius-lg);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-700);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-gray-200);
+}
+
+.btn-ghost {
+    background-color: transparent;
+    color: var(--color-primary);
+    padding: var(--space-2) var(--space-4);
+}
+
+.btn-ghost:hover {
+    background-color: var(--color-primary-50);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Cards de projeto */
+.project-card {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-6);
+    transition: all var(--transition-base);
+}
+
+.project-card:hover {
+    border-color: var(--color-gray-300);
+    box-shadow: var(--shadow-lg);
+}
+
+.project-featured {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-white) 100%);
+}
+
+.project-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.project-icon {
+    font-size: var(--font-size-3xl);
+}
+
+.project-status {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.status-badge {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-full);
+}
+
+.status-live {
+    background-color: var(--color-success);
+    color: var(--color-white);
+}
+
+.status-wip {
+    background-color: var(--color-warning);
+    color: var(--color-white);
+}
+
+.project-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-3);
+}
+
+.project-description {
+    color: var(--color-gray-600);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--space-4);
+}
+
+.project-features {
+    background-color: var(--color-gray-50);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.project-features h4 {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-700);
+    margin-bottom: var(--space-2);
+}
+
+.project-features ul {
+    list-style: disc;
+    padding-left: var(--space-5);
+}
+
+.project-features li {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    margin-bottom: var(--space-1);
+}
+
+.project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+}
+
+.tech-tag {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+    background-color: var(--color-primary-50);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-full);
+}
+
+.project-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+/* Badges de status do pipeline */
+.status-pending {
+    background-color: var(--status-pending);
+}
+
+.status-processing {
+    background-color: var(--status-processing);
+}
+
+.status-completed {
+    background-color: var(--status-completed);
+}
+
+.status-error {
+    background-color: var(--status-error);
+}
+
+/* Cards de skill */
+.skill-category {
+    background-color: var(--color-gray-50);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-6);
+}
+
+.skill-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.skill-list li {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.skill-list li::before {
+    content: '▸';
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+}

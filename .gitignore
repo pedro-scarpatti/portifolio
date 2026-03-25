@@ -1,21 +1,40 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
 # OS
 .DS_Store
 Thumbs.db
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Archives
-QUICK-START.md
-
 # Logs
 *.log
+npm-debug.log*
 
-# Editor backups
-*~
-*.bak
+# Cache
+.cache/
+*.tsbuildinfo
 
+# Video (large asset - keep in git LFS if needed)
+# public/videos/
+
+# Temporary files
+tmp/
+temp/
