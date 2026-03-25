@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archives
+QUICK-START.md
+
+# Logs
+*.log
+
+# Editor backups
+*~
+*.bak
+

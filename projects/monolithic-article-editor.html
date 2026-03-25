@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor de Artigo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg2: #f7f7f5;
+      --bg3: #f0ede8;
+      --text: #1a1a1a;
+      --text2: #666666;
+      --text3: #999999;
+      --border: #e5e5e5;
+      --border2: #cccccc;
+      --accent: #D85A30;
+      --blue: #378ADD;
+      --info-bg: #e8f1fb;
+      --info-text: #185FA5;
+      --success: #639922;
+      --danger: #E24B4A;
+    }
+
+    body {
+      background: var(--bg2);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--danger);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .status-dot.saved { background: var(--success); }
+    .toolbar-right { display: flex; gap: 8px; }
+    .btn {
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: #fff;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      transition: background 0.15s;
+    }
+    .btn:hover { background: var(--bg2); }
+    .btn.primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .btn.primary:hover { background: #333; }
+
+    /* ── HINT BAR ── */
+    .hint-bar {
+      background: var(--info-bg);
+      color: var(--info-text);
+      font-size: 12px;
+      padding: 7px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hint-tag {
+      background: var(--info-text);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── ARTICLE WRAPPER ── */
+    .article-wrap {
+      max-width: 900px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+
+    .article-inner { padding: 0 0 60px; }
+
+    /* ── EDITABLE FIELDS ── */
+    .ef {
+      border-radius: 5px;
+      outline: none;
+      cursor: text;
+      transition: background 0.15s, box-shadow 0.15s;
+      position: relative;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    .ef:hover { background: rgba(0,0,0,0.03); }
+    .ef:focus {
+      background: rgba(55, 138, 221, 0.06);
+      box-shadow: 0 0 0 2px var(--blue);
+    }
+
+    /* ── HEADER SECTION ── */
+    .article-header { padding: 40px 44px 0; }
+
+    .article-category {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 18px;
+      display: flex;
+      gap: 8px;
+    }
+    .article-category span { color: var(--accent); }
+
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding: 4px 6px;
+      display: block;
+      min-height: 52px;
+      word-break: break-word;
+    }
+
+    .article-subtitle {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--text2);
+      margin-bottom: 24px;
+      padding: 4px 6px;
+      display: block;
+      min-height: 30px;
+      word-break: break-word;
+    }
+
+    /* ── META ── */
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 44px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+    .meta-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .meta-sep { color: var(--border2); }
+
+    /* ── HERO IMAGE ── */
+    .hero-wrap {
+      position: relative;
+      margin: 0 44px 32px;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg2);
+      flex-shrink: 0;
+    }
+    .hero-img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+    .img-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-wrap:hover .img-overlay,
+    .inline-img-wrap:hover .img-overlay {
+      background: rgba(0,0,0,0.38);
+    }
+    .img-change-btn {
+      opacity: 0;
+      transition: opacity 0.2s;
+      background: rgba(255,255,255,0.96);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .hero-wrap:hover .img-change-btn,
+    .inline-img-wrap:hover .img-change-btn {
+      opacity: 1;
+    }
+    .img-caption {
+      font-size: 11px;
+      color: var(--text3);
+      text-align: center;
+      margin: -16px 44px 28px;
+      font-style: italic;
+    }
+
+    /* ── BODY GRID ── */
+    .article-body {
+      padding: 0 44px;
+      display: grid;
+      grid-template-columns: 1fr 216px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── BODY TEXT ── */
+    .body-text {
+      font-size: 17px;
+      line-height: 1.82;
+      color: #222;
+      font-weight: 300;
+      margin-bottom: 22px;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin: 32px 0 14px;
+      color: var(--text);
+      padding: 4px 6px;
+      display: block;
+      min-height: 34px;
+      word-break: break-word;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--accent);
+      padding: 12px 20px;
+      margin: 26px 0;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 20px;
+      line-height: 1.5;
+      color: var(--text2);
+    }
+
+    /* ── INLINE IMAGES ── */
+    .inline-img-wrap {
+      margin: 24px 0;
+      position: relative;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg2);
+    }
+    .inline-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+    }
+    .inline-caption {
+      font-size: 11px;
+      color: var(--text3);
+      font-style: italic;
+      margin: 6px 0 16px;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {}
+    .sidebar-card {
+      background: var(--bg2);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .sidebar-card.outlined {
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 12px;
+    }
+    .sidebar-thumb-wrap {
+      position: relative;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      background: var(--border);
+    }
+    .sidebar-thumb {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+    .sidebar-tag {
+      display: inline-block;
+      background: #fff;
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      margin: 3px 3px 3px 0;
+      color: var(--text2);
+      cursor: default;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar-tag:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .sidebar-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+    .sidebar-table td { padding: 6px 0; color: var(--text2); }
+    .sidebar-table td:last-child { text-align: right; color: var(--text); }
+    .sidebar-table tr + tr td { border-top: 1px solid var(--border); }
+
+    /* ── IMAGE MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px;
+      width: 420px;
+      max-width: 92vw;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .modal-preview {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      background: var(--bg2);
+      display: block;
+      border: 1px solid var(--border);
+    }
+    .modal-input {
+      width: 100%;
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: #fff;
+      margin-bottom: 6px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .modal-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(55,138,221,0.15);
+    }
+    .modal-hint {
+      font-size: 11px;
+      color: var(--text3);
+      margin-bottom: 18px;
+    }
+    .modal-hint a { color: var(--blue); text-decoration: none; cursor: pointer; }
+    .modal-hint a:hover { text-decoration: underline; }
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Não salvo</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn" onclick="saveArticle()">Salvar rascunho</button>
+      <button class="btn primary">Publicar</button>
+    </div>
+  </div>
+
+  <!-- HINT BAR -->
+  <div class="hint-bar">
+    <span class="hint-tag">Edição</span>
+    Clique nos textos em destaque para editar · Clique nas imagens para trocar
+  </div>
+
+  <!-- ARTICLE -->
+  <div class="article-wrap">
+    <div class="article-inner">
+
+      <!-- HEADER -->
+      <div class="article-header">
+        <div class="article-category">
+          <span>Arquitetura</span> · <span>Urbanismo</span>
+        </div>
+
+        <div
+          class="article-title ef"
+          contenteditable="true"
+          data-field="title"
+          spellcheck="false"
+          data-placeholder="Título do artigo..."
+        >Quando o concreto encontra o horizonte: a nova geração de arranha-céus sustentáveis</div>
+
+        <div
+          class="article-subtitle ef"
+          contenteditable="true"
+          data-field="subtitle"
+          spellcheck="false"
+          data-placeholder="Subtítulo do artigo..."
+        >Projetistas ao redor do mundo reinventam a relação entre o edifício e o meio ambiente, priorizando luz natural, ventilação e materiais de baixo impacto.</div>
+      </div>
+
+      <!-- META -->
+      <div class="article-meta">
+        <div class="meta-avatar">MR</div>
+        <strong>Marina Rocha</strong>
+        <span class="meta-sep">·</span>
+        <span>24 de março de 2026</span>
+        <span class="meta-sep">·</span>
+        <span>8 min de leitura</span>
+      </div>
+
+      <!-- HERO IMAGE -->
+      <div class="hero-wrap" onclick="openModal('hero')">
+        <img class="hero-img" id="hero-img"
+          src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=80"
+          alt="Imagem de capa" />
+        <div class="img-overlay">
+          <button class="img-change-btn" onclick="event.stopPropagation(); openModal('hero')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Trocar imagem
+          </button>
+        </div>
+      </div>
+      <p class="img-caption">Vista aérea do Complexo Verde — São Paulo, 2025. Foto: Arq. Felipe Dante</p>
+
+      <!-- BODY -->
+      <div class="article-body">
+        <!-- MAIN COLUMN -->
+        <div class="body-main">
+          <p class="body-text">
+            A skyline das grandes metrópoles está em transformação silenciosa. Enquanto décadas anteriores celebravam a altura como métrica de progresso, o século XXI redefine o prestígio dos edifícios pela sua capacidade de dialogar com o entorno — e de consumir menos do que produzem.
+          </p>
+
+          <div class="pull-quote">
+            "A arquitetura do futuro não pergunta quanto o prédio alcança, mas quanto ele devolve."
+          </div>
+
+          <p class="body-text">
+            Em São Paulo, o Complexo Verde — inaugurado em 2025 — tornou-se símbolo dessa virada. Projetado pelo escritório Ávila & Monteiro, o conjunto de três torres integra painéis fotovoltaicos à fachada, captação de água da chuva e jardins verticais que reduzem a temperatura interna em até 4°C sem ar-condicionado convencional.
+          </p>
+
+          <!-- SECTION HEADING -->
+          <div
+            class="section-heading ef"
+            contenteditable="true"
+            data-field="section1"
+            spellcheck="false"
+            data-placeholder="Título de seção..."
+          >Do blueprint ao bairro</div>
+
+          <p class="body-text">
+            O desafio não é apenas técnico. Arquitetos precisam convencer incorporadores — historicamente avessos a custos iniciais mais altos — de que a sustentabilidade é um diferencial comercial, não um ônus. Os números começam a sustentar esse argumento: edifícios com certificação LEED Platinum registram valorização média de 12% acima do mercado.
+          </p>
+
+          <!-- INLINE IMAGE -->
+          <div class="inline-img-wrap" onclick="openModal('inline1')">
+            <img class="inline-img" id="inline1-img"
+              src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80"
+              alt="Interior sustentável" />
+            <div class="img-overlay">
+              <button class="img-change-btn" onclick="event.stopPropagation(); openModal('inline1')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Trocar imagem
+              </button>
+            </div>
+          </div>
+          <p class="inline-caption">Átrio central com iluminação natural zenithal — Torre B do Complexo Verde.</p>
+
+          <p class="body-text">
+            A tendência não é exclusividade paulistana. Em Rotterdam, Singapura e Chicago, a nova geração de torres combina estruturas de madeira engenheirada, fachadas adaptativas que respondem à luz solar e sistemas de energia circular.
+          </p>
+
+          <hr class="divider" />
+
+          <!-- SECTION HEADING 2 -->
+          <div
+            class="section-heading ef"
+            contenteditable="true"
+            data-field="section2"
+            spellcheck="false"
+            data-placeholder="Título de seção..."
+          >O papel dos materiais</div>
+
+          <p class="body-text">
+            O concreto, onipresente nas construções do século passado, está cedendo espaço ao CLT (Cross-Laminated Timber) e ao bambu estrutural. Ambos sequestram carbono durante o crescimento e liberam muito menos CO₂ na produção do que o aço ou o concreto convencional.
+          </p>
+
+          <!-- INLINE IMAGE 2 -->
+          <div class="inline-img-wrap" onclick="openModal('inline2')">
+            <img class="inline-img" id="inline2-img"
+              src="https://images.unsplash.com/photo-1464082354059-27db6ce50048?w=800&q=80"
+              alt="Materiais sustentáveis" />
+            <div class="img-overlay">
+              <button class="img-change-btn" onclick="event.stopPropagation(); openModal('inline2')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Trocar imagem
+              </button>
+            </div>
+          </div>
+
+          <p class="body-text">
+            Pesquisadores da USP estimam que a adoção ampla de CLT em obras comerciais poderia reduzir as emissões da construção civil brasileira em até 30% até 2035 — desde que acompanhada de políticas de manejo florestal certificado.
+          </p>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-label">Galeria do projeto</div>
+            <div class="sidebar-thumb-wrap" onclick="openModal('side1')">
+              <img class="sidebar-thumb" id="side1-img"
+                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&q=80"
+                alt="Projeto" />
+              <div class="img-overlay">
+                <button class="img-change-btn" style="padding:7px 13px;font-size:11px;" onclick="event.stopPropagation(); openModal('side1')">Trocar</button>
+              </div>
+            </div>
+            <div class="sidebar-thumb-wrap" onclick="openModal('side2')">
+              <img class="sidebar-thumb" id="side2-img"
+                src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=80"
+                alt="Detalhe" />
+              <div class="img-overlay">
+                <button class="img-change-btn" style="padding:7px 13px;font-size:11px;" onclick="event.stopPropagation(); openModal('side2')">Trocar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-label">Temas relacionados</div>
+            <span class="sidebar-tag">Sustentabilidade</span>
+            <span class="sidebar-tag">Urbanismo</span>
+            <span class="sidebar-tag">LEED</span>
+            <span class="sidebar-tag">Madeira CLT</span>
+            <span class="sidebar-tag">São Paulo</span>
+            <span class="sidebar-tag">Design Urbano</span>
+          </div>
+
+          <div class="sidebar-card outlined">
+            <div class="sidebar-label">Sobre o projeto</div>
+            <table class="sidebar-table">
+              <tr><td>Local</td><td>São Paulo, SP</td></tr>
+              <tr><td>Conclusão</td><td>2025</td></tr>
+              <tr><td>Certificação</td><td>LEED Platinum</td></tr>
+              <tr><td>Área total</td><td>48.000 m²</td></tr>
+              <tr><td>Torres</td><td>3 edificações</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMAGE MODAL -->
+  <div class="modal-backdrop" id="img-modal" onclick="handleBackdropClick(event)">
+    <div class="modal-box">
+      <div class="modal-title">Trocar imagem</div>
+      <img class="modal-preview" id="modal-preview" src="" alt="preview" />
+      <input
+        class="modal-input"
+        type="url"
+        id="modal-url"
+        placeholder="Cole a URL da imagem..."
+        oninput="previewUrl(this.value)"
+      />
+      <div class="modal-hint">
+        Teste com Unsplash:
+        <a onclick="fillSample()">gerar URL de exemplo</a>
+      </div>
+      <div class="modal-btns">
+        <button class="btn" onclick="closeModal()">Cancelar</button>
+        <button class="btn primary" onclick="applyImage()">Aplicar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">Rascunho salvo ✓</div>
+
+  <script>
+    // ── STATE ──
+    let currentTarget = null;
+    let isDirty = false;
+
+    const samples = [
+      'https://images.unsplash.com/photo-1431576901776-e539bd916ba2?w=900&q=80',
+      'https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=900&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80',
+      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+      'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
+    ];
+
+    // ── DIRTY / SAVED ──
+    function markDirty() {
+      if (isDirty) return;
+      isDirty = true;
+      document.getElementById('status-dot').classList.remove('saved');
+      document.getElementById('status-text').textContent = 'Não salvo';
+    }
+
+    function markSaved() {
+      isDirty = false;
+      document.getElementById('status-dot').classList.add('saved');
+      document.getElementById('status-text').textContent = 'Salvo';
+    }
+
+    // ── SAVE ──
+    function saveArticle() {
+      const data = {};
+
+      // Collect text fields
+      document.querySelectorAll('[data-field]').forEach(el => {
+        data[el.dataset.field] = el.innerText.trim();
+      });
+
+      // Collect image URLs
+      ['hero', 'inline1', 'inline2', 'side1', 'side2'].forEach(id => {
+        const el = document.getElementById(id + '-img');
+        if (el) data['img_' + id] = el.src;
+      });
+
+      // Validate title
+      if (!data.title) {
+        alert('O artigo precisa de um título.');
+        document.querySelector('[data-field="title"]').focus();
+        return;
+      }
+
+      console.log('Article JSON:', JSON.stringify(data, null, 2));
+      markSaved();
+      showToast('Rascunho salvo ✓');
+    }
+
+    // ── MODAL ──
+    function openModal(target) {
+      currentTarget = target;
+      const img = document.getElementById(target + '-img');
+      document.getElementById('modal-preview').src = img ? img.src : '';
+      document.getElementById('modal-url').value = img ? img.src : '';
+      document.getElementById('img-modal').classList.add('open');
+      setTimeout(() => document.getElementById('modal-url').focus(), 50);
+    }
+
+    function closeModal() {
+      document.getElementById('img-modal').classList.remove('open');
+      currentTarget = null;
+    }
+
+    function handleBackdropClick(e) {
+      if (e.target === document.getElementById('img-modal')) closeModal();
+    }
+
+    function previewUrl(url) {
+      if (url.startsWith('http')) {
+        document.getElementById('modal-preview').src = url;
+      }
+    }
+
+    function applyImage() {
+      const url = document.getElementById('modal-url').value.trim();
+      if (!url) return;
+      const img = document.getElementById(currentTarget + '-img');
+      if (img) { img.src = url; markDirty(); }
+      closeModal();
+    }
+
+    function fillSample() {
+      const url = samples[Math.floor(Math.random() * samples.length)];
+      document.getElementById('modal-url').value = url;
+      previewUrl(url);
+    }
+
+    // ── TOAST ──
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // ── KEYBOARD ──
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('img-modal');
+        if (modal.classList.contains('open')) { closeModal(); return; }
+        if (document.activeElement && document.activeElement.classList.contains('ef')) {
+          document.activeElement.blur();
+        }
+      }
+      if (e.key === 'Enter' && document.activeElement) {
+        const el = document.activeElement;
+        if (el.dataset.field === 'title' || el.classList.contains('section-heading')) {
+          e.preventDefault();
+          el.blur();
+        }
+      }
+    });
+
+    // ── MARK DIRTY ON EDIT ──
+    document.querySelectorAll('.ef').forEach(el => {
+      el.addEventListener('input', markDirty);
+    });
+  </script>
+</body>
+</html>

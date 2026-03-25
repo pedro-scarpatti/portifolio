@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SUS — Painel de Atendimento</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #F6F4EF;
+    --bg2:       #EDEAE3;
+    --white:     #FFFFFF;
+    --ink:       #181816;
+    --ink2:      #68665E;
+    --ink3:      #A5A19A;
+    --line:      #E0DDD6;
+    --accent:    #1A6B3C;
+    --accent-lt: #D3E9DC;
+    --pref:      #B54A1A;
+    --pref-lt:   #F2E4DC;
+    --serif:     'DM Serif Display', Georgia, serif;
+    --sans:      'DM Sans', system-ui, sans-serif;
+    --h-header:  64px;
+    --h-footer:  56px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    display: grid;
+    grid-template-rows: var(--h-header) 1fr var(--h-footer);
+  }
+
+  /* ─ HEADER ─ */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    flex-shrink: 0;
+  }
+
+  .h-left { display: flex; align-items: center; gap: 18px; }
+
+  .sus-chip {
+    background: var(--accent);
+    border-radius: 8px;
+    padding: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    gap: 2px;
+  }
+  .sus-chip .s1 { font-family: var(--serif); font-size: 17px; color: #fff; letter-spacing: 1px; }
+  .sus-chip .s2 { font-size: 8px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.6); }
+
+  .sep { width: 1px; height: 26px; background: var(--line); }
+
+  .h-unidade { font-size: 13px; font-weight: 300; color: var(--ink2); font-style: italic; }
+
+  .h-right { display: flex; align-items: center; gap: 28px; }
+
+  #relogio { font-family: var(--serif); font-size: 28px; letter-spacing: .04em; color: var(--ink); line-height: 1; }
+  #data-h  { font-size: 10px; font-weight: 400; color: var(--ink3); letter-spacing: .05em; text-align: right; margin-top: 3px; }
+
+  .btn-painel {
+    background: var(--accent); color: #fff; border: none; border-radius: 8px;
+    font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: .07em;
+    padding: 9px 18px; cursor: pointer; transition: background .2s; white-space: nowrap;
+  }
+  .btn-painel:hover { background: #125230; }
+
+  /* ─ MAIN ─ */
+  main {
+    display: grid;
+    grid-template-columns: 1fr 38vw;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* ── DISPLAY ── */
+  .col-display {
+    display: flex;
+    flex-direction: column;
+    padding: 0 56px;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .senha-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  .vazio-num { font-family: var(--serif); font-size: clamp(96px,15vw,190px); color: var(--line); line-height: .88; letter-spacing: -.03em; user-select: none; }
+  .vazio-txt { font-size: 14px; font-weight: 300; color: var(--ink3); font-style: italic; margin-top: 18px; }
+
+  .chamada { display: none; }
+
+  .c-barra { width: 40px; height: 2px; background: var(--accent); margin-bottom: 22px; transition: background .3s; }
+  .chamada.pref .c-barra { background: var(--pref); }
+
+  .c-eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--ink3); margin-bottom: 6px;
+  }
+  .c-eyebrow .pulse {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0;
+    animation: pulso 2s ease-in-out infinite;
+  }
+  .chamada.pref .c-eyebrow .pulse { background: var(--pref); }
+
+  @keyframes pulso { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.75)} }
+
+  .c-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    border-radius: 20px; padding: 5px 13px;
+    font-size: 11px; font-weight: 500; letter-spacing: .04em;
+    margin-bottom: 10px; width: fit-content;
+    background: var(--accent-lt); color: var(--accent); transition: all .3s;
+  }
+  .c-badge::before { content:''; width:4px; height:4px; border-radius:50%; background:currentColor; }
+  .c-badge.pref-b  { background: var(--pref-lt); color: var(--pref); }
+
+  .c-numero {
+    font-family: var(--serif);
+    font-size: clamp(96px,15vw,190px);
+    color: var(--ink); line-height: .88; letter-spacing: -.03em;
+    transition: color .35s;
+  }
+  .chamada.pref .c-numero { color: var(--pref); }
+
+  .chamada.anima .c-numero { animation: slideUp .45s cubic-bezier(.16,1,.3,1); }
+  @keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  .c-guiche { margin-top: 20px; display: flex; flex-direction: column; gap: 3px; }
+  .c-guiche-label { font-size: 10px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); }
+  .c-guiche-num   { font-family: var(--serif); font-size: clamp(42px,5vw,60px); color: var(--ink); line-height: 1; }
+
+  .historico { padding-bottom: 24px; flex-shrink: 0; }
+  .hist-titulo { font-size: 9px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px; }
+  .hist-lista  { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hist-item   { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; min-width: 74px; }
+  .hist-item .hi-s { font-family: var(--serif); font-size: 18px; color: var(--ink); line-height: 1; }
+  .hist-item .hi-g { font-size: 10px; color: var(--ink3); margin-top: 1px; }
+  .hist-item.p     { border-color: #DDB49E; }
+  .hist-item.p .hi-s { color: var(--pref); }
+
+  /* ── PLAYER ── */
+  .col-video {
+    border-left: 1px solid var(--line);
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .video-wrap {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .video-loading {
+    position: absolute; inset: 0;
+    background: #080e08;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    pointer-events: none;
+    transition: opacity .6s .3s;
+  }
+  .video-loading.oculto { opacity: 0; pointer-events: none; }
+
+  .vl-spinner {
+    width: 30px; height: 30px;
+    border: 2px solid #1e2e1e;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .vl-txt { font-size: 11px; font-weight: 300; color: #3a4e3a; letter-spacing: .07em; }
+
+  .video-bar {
+    background: #0c130c;
+    border-top: 1px solid #182018;
+    padding: 10px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .vb-label { font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #4a6a4a; }
+  .vb-sus   { font-size: 10px; color: #3a5a3a; font-weight: 300; }
+
+  /* ─ FOOTER ─ */
+  footer {
+    background: var(--white);
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center;
+    padding: 0 40px; gap: 0; flex-shrink: 0;
+  }
+
+  .f-item {
+    display: flex; align-items: center; gap: 10px;
+    padding-right: 28px; margin-right: 28px;
+    border-right: 1px solid var(--line);
+  }
+  .f-item:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+  .f-icon { color: var(--ink3); flex-shrink: 0; }
+  .f-label { font-size: 9px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); line-height: 1; }
+  .f-val   { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.25; margin-top: 1px; }
+
+  /* ─ DRAWER ─ */
+  .overlay { display:none; position:fixed; inset:0; background:rgba(18,18,16,.28); backdrop-filter:blur(3px); z-index:80; }
+  .overlay.on { display:block; }
+
+  .drawer {
+    position: fixed; top:0; right:-480px;
+    width: 440px; height: 100vh;
+    background: var(--white); border-left: 1px solid var(--line);
+    z-index: 90; display: flex; flex-direction: column;
+    transition: right .4s cubic-bezier(.16,1,.3,1);
+  }
+  .drawer.on { right: 0; }
+
+  .dr-head {
+    padding: 28px 32px 22px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: flex-start; justify-content: space-between;
+  }
+  .dr-titulo { font-family: var(--serif); font-size: 22px; color: var(--ink); }
+  .dr-sub    { font-size: 12px; color: var(--ink3); font-weight: 300; margin-top: 4px; }
+  .dr-close  {
+    background:none; border:1px solid var(--line); border-radius:6px;
+    width:30px; height:30px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:14px; color:var(--ink2); transition:background .2s;
+  }
+  .dr-close:hover { background: var(--bg); }
+
+  .dr-body { flex:1; overflow-y:auto; padding:28px 32px; display:flex; flex-direction:column; gap:22px; }
+
+  .ws-pill {
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--accent-lt); color:var(--accent);
+    border-radius:20px; padding:6px 14px;
+    font-size:11px; font-weight:500; letter-spacing:.04em; width:fit-content;
+  }
+  .ws-pill .dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation:pulso 2s ease-in-out infinite; }
+
+  .campo { display:flex; flex-direction:column; gap:7px; }
+  .campo label { font-size:9px; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:var(--ink3); }
+  .campo select {
+    appearance:none;
+    background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6860' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+    border:1px solid var(--line); border-radius:10px;
+    font-family:var(--sans); font-size:15px; color:var(--ink);
+    padding:11px 40px 11px 14px; outline:none; cursor:pointer; transition:border-color .2s;
+  }
+  .campo select:focus { border-color:var(--accent); }
+
+  .tipo-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .tipo-op {
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 14px; cursor:pointer; text-align:left; font-family:var(--sans); transition:all .2s;
+  }
+  .tipo-op .to-l { font-size:13px; font-weight:500; color:var(--ink); display:block; }
+  .tipo-op .to-s { font-size:10px; color:var(--ink3); font-weight:300; margin-top:2px; display:block; }
+  .tipo-op.sel-n { background:var(--accent-lt); border-color:var(--accent); }
+  .tipo-op.sel-n .to-l { color:var(--accent); }
+  .tipo-op.sel-p { background:var(--pref-lt); border-color:var(--pref); }
+  .tipo-op.sel-p .to-l { color:var(--pref); }
+
+  .btn-chamar {
+    width:100%; background:var(--accent); color:#fff; border:none; border-radius:12px;
+    font-family:var(--serif); font-size:20px; padding:18px; cursor:pointer;
+    transition:background .2s, transform .1s; letter-spacing:.02em;
+  }
+  .btn-chamar:hover { background:#125230; }
+  .btn-chamar:active { transform:scale(.99); }
+
+  .btn-rep {
+    width:100%; background:none; border:1px solid var(--line); border-radius:12px;
+    font-family:var(--sans); font-size:13px; color:var(--ink2); padding:12px;
+    cursor:pointer; transition:all .2s; letter-spacing:.04em;
+  }
+  .btn-rep:hover { background:var(--bg); color:var(--ink); }
+
+  .log-box { border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .log-box-h {
+    background:var(--bg); border-bottom:1px solid var(--line);
+    padding:9px 14px; font-size:9px; font-weight:500; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--ink3);
+  }
+  .log-scroll { max-height:220px; overflow-y:auto; }
+  .log-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:9px 14px; border-bottom:1px solid var(--bg);
+  }
+  .log-row:last-child { border-bottom:none; }
+  .lr-s { font-family:var(--serif); font-size:17px; color:var(--ink); }
+  .lr-s.p { color:var(--pref); }
+  .lr-g { font-size:11px; color:var(--ink3); font-weight:300; }
+  .lr-t { font-size:10px; color:var(--ink3); font-weight:300; }
+  .log-vazio { padding:18px 14px; font-size:12px; color:var(--ink3); font-style:italic; font-weight:300; }
+
+  .toast {
+    position:fixed; bottom:72px; left:50%;
+    transform:translateX(-50%) translateY(14px);
+    background:var(--ink); color:#fff; padding:10px 22px; border-radius:100px;
+    font-size:13px; opacity:0; pointer-events:none; z-index:200;
+    transition:all .35s cubic-bezier(.16,1,.3,1); white-space:nowrap;
+  }
+  .toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-left">
+    <div class="sus-chip"><span class="s1">SUS</span><span class="s2">Sistema Único de Saúde</span></div>
+    <div class="sep"></div>
+    <span class="h-unidade">UBS Mock — Lorem Ipsum, ES</span>
+  </div>
+  <div class="h-right">
+    <div>
+      <div id="relogio">00:00</div>
+      <div id="data-h">—</div>
+    </div>
+    <button class="btn-painel" onclick="abrirDrawer()">Painel do atendente</button>
+  </div>
+</header>
+
+<main>
+  <!-- DISPLAY -->
+  <div class="col-display">
+    <div class="senha-stage">
+
+      <div id="vazio">
+        <div class="vazio-num">—</div>
+        <div class="vazio-txt">Aguardando chamada…</div>
+      </div>
+
+      <div class="chamada" id="chamada">
+        <div class="c-barra"></div>
+        <div class="c-eyebrow"><span class="pulse"></span><span>Chamando agora</span></div>
+        <div class="c-badge" id="c-badge">Atendimento normal</div>
+        <div class="c-numero" id="c-numero">—</div>
+        <div class="c-guiche">
+          <span class="c-guiche-label">Guichê</span>
+          <span class="c-guiche-num" id="c-guiche">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="historico">
+      <div class="hist-titulo">Últimas chamadas</div>
+      <div class="hist-lista" id="hist-lista"></div>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div class="col-video">
+    <div class="video-wrap">
+      <!--
+        Troque o src pelo embed da sua playlist institucional.
+        Usando playlist pública do Canal Saúde (Fiocruz) como exemplo.
+        Em produção: autoplay=1&mute=1&loop=1&controls=0&playlist=ID
+      -->
+      <iframe
+        id="yt-frame"
+        src="https://www.youtube.com/watch?v=ieBeVYky_uA&list=PLYJTCR4B1vqa_AonbeNezBFAJtRfD1LVk&autoplay=1&mute=1&loop=1&controls=0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen
+        onload="document.getElementById('vid-loading').classList.add('oculto')"
+      ></iframe>
+      <div class="video-loading" id="vid-loading">
+        <div class="vl-spinner"></div>
+        <span class="vl-txt">Carregando conteúdo…</span>
+      </div>
+    </div>
+    <div class="video-bar">
+      <span class="vb-label">Canal Saúde</span>
+      <span class="vb-sus">Fiocruz · Ministério da Saúde</span>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="f-item">
+    <svg class="f-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="f-label">Temperatura</div>
+      <div class="f-val" id="f-temp">28 °C</div>
+    </div>
+  </div>
+
+  <div class="f-item">
+    <svg class="f-icon" width="15" height="19" viewBox="0 0 15 19" fill="none">
+      <path d="M7.5 1C7.5 1 1 9 1 13a6.5 6.5 0 0013 0C14 9 7.5 1 7.5 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="f-label">Umidade</div>
+      <div class="f-val">74 %</div>
+    </div>
+  </div>
+
+  <div class="f-item">
+    <svg class="f-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="f-label">Espera média</div>
+      <div class="f-val">~18 min</div>
+    </div>
+  </div>
+
+  <div class="f-item">
+    <svg class="f-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="f-label">Na fila</div>
+      <div class="f-val"><span id="f-fila">12</span> pessoas</div>
+    </div>
+  </div>
+
+  <div class="f-item">
+    <svg class="f-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M8 2v4M16 2v4M3 9h18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="f-label">Data</div>
+      <div class="f-val" id="f-data">—</div>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" onclick="fecharDrawer()"></div>
+
+<div class="drawer" id="drawer">
+  <div class="dr-head">
+    <div>
+      <div class="dr-titulo">Atendente</div>
+      <div class="dr-sub" id="dr-sub">Guichê 03 · conectado</div>
+    </div>
+    <button class="dr-close" onclick="fecharDrawer()">✕</button>
+  </div>
+  <div class="dr-body">
+    <div class="ws-pill"><span class="dot"></span>WebSocket ativo</div>
+
+    <div class="campo">
+      <label>Guichê</label>
+      <select id="sel-guiche" onchange="mudarGuiche(this.value)">
+        <option value="01">Guichê 01</option>
+        <option value="02">Guichê 02</option>
+        <option value="03" selected>Guichê 03</option>
+        <option value="04">Guichê 04</option>
+        <option value="05">Guichê 05</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label>Tipo de atendimento</label>
+      <div class="tipo-grid">
+        <button class="tipo-op sel-n" id="op-n" onclick="setTipo('normal')">
+          <span class="to-l">Normal</span><span class="to-s">Ordem de chegada</span>
+        </button>
+        <button class="tipo-op" id="op-p" onclick="setTipo('preferencial')">
+          <span class="to-l">Preferencial</span><span class="to-s">Idosos, gestantes…</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="btn-chamar" onclick="chamarProxima()">Chamar próxima senha</button>
+    <button class="btn-rep" onclick="repetirChamada()">↻  Repetir última chamada</button>
+
+    <div class="log-box">
+      <div class="log-box-h">Histórico da sessão</div>
+      <div class="log-scroll" id="log-scroll">
+        <div class="log-vazio">Nenhuma chamada ainda.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const S = { guiche:'03', tipo:'normal', atual:null, hist:[], cn:40, cp:10, fila:12 };
+
+function tick() {
+  const n = new Date(), p = v => String(v).padStart(2,'0');
+  document.getElementById('relogio').textContent = `${p(n.getHours())}:${p(n.getMinutes())}`;
+  const dias   = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const meses  = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  document.getElementById('data-h').textContent  = `${dias[n.getDay()]}, ${p(n.getDate())} ${meses[n.getMonth()]} ${n.getFullYear()}`;
+  document.getElementById('f-data').textContent  = `${p(n.getDate())}/${p(n.getMonth()+1)}/${n.getFullYear()}`;
+}
+setInterval(tick, 1000); tick();
+
+function abrirDrawer()  { document.getElementById('drawer').classList.add('on');    document.getElementById('overlay').classList.add('on');    }
+function fecharDrawer() { document.getElementById('drawer').classList.remove('on'); document.getElementById('overlay').classList.remove('on'); }
+function mudarGuiche(v) { S.guiche = v; document.getElementById('dr-sub').textContent = `Guichê ${v} · conectado`; }
+function setTipo(t) {
+  S.tipo = t;
+  document.getElementById('op-n').className = 'tipo-op' + (t==='normal'        ? ' sel-n' : '');
+  document.getElementById('op-p').className = 'tipo-op' + (t==='preferencial'  ? ' sel-p' : '');
+}
+
+function beep(pref) {
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const seq = pref ? [{f:740,d:.12},{f:988,d:.12},{f:1175,d:.28}] : [{f:523,d:.18},{f:784,d:.28}];
+    let t = ctx.currentTime + .05;
+    seq.forEach(({f,d}) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = pref ? 'triangle' : 'sine';
+      o.frequency.value = f;
+      g.gain.setValueAtTime(.35, t);
+      g.gain.exponentialRampToValueAtTime(.001, t+d);
+      o.start(t); o.stop(t+d+.02);
+      t += d + .06;
+    });
+  } catch(e) {}
+}
+
+function emit(payload) {
+  console.log('[WS →]', JSON.stringify(payload, null, 2));
+  handle(payload);
+}
+
+function handle(p) {
+  if (p.tipo !== 'CHAMAR_SENHA') return;
+
+  document.getElementById('vazio').style.display = 'none';
+  const el = document.getElementById('chamada');
+  el.style.display = 'block';
+  el.className = 'chamada' + (p.prioridade==='preferencial' ? ' pref' : '');
+
+  document.getElementById('c-numero').textContent = p.senha;
+  document.getElementById('c-guiche').textContent = p.guiche;
+  const badge = document.getElementById('c-badge');
+  badge.textContent = p.prioridade==='preferencial' ? 'Atendimento preferencial' : 'Atendimento normal';
+  badge.className   = p.prioridade==='preferencial' ? 'c-badge pref-b' : 'c-badge';
+
+  void el.offsetWidth;
+  el.classList.add('anima');
+  setTimeout(() => el.classList.remove('anima'), 500);
+
+  beep(p.prioridade==='preferencial');
+
+  S.hist.unshift(p);
+  if (S.hist.length > 5) S.hist.pop();
+  document.getElementById('hist-lista').innerHTML = S.hist.map(h =>
+    `<div class="hist-item${h.prioridade==='preferencial'?' p':''}">
+      <div class="hi-s">${h.senha}</div><div class="hi-g">Guichê ${h.guiche}</div>
+    </div>`
+  ).join('');
+
+  const ls = document.getElementById('log-scroll');
+  const vz = ls.querySelector('.log-vazio');
+  if (vz) vz.remove();
+  const n = new Date(), pp = v => String(v).padStart(2,'0');
+  const row = document.createElement('div');
+  row.className = 'log-row';
+  row.innerHTML = `<span class="lr-s ${p.prioridade==='preferencial'?'p':''}">${p.senha}</span><span class="lr-g">Guichê ${p.guiche}</span><span class="lr-t">${pp(n.getHours())}:${pp(n.getMinutes())}</span>`;
+  ls.prepend(row);
+
+  if (S.fila > 0) { S.fila--; document.getElementById('f-fila').textContent = S.fila; }
+
+  toast(`Senha ${p.senha} — Guichê ${p.guiche}`);
+  S.atual = p;
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('on'), 3000);
+}
+
+function gerarSenha() {
+  return S.tipo==='preferencial'
+    ? 'P' + String(++S.cp).padStart(3,'0')
+    : 'A' + String(++S.cn).padStart(3,'0');
+}
+
+function chamarProxima() {
+  emit({ tipo:'CHAMAR_SENHA', senha:gerarSenha(), guiche:S.guiche, prioridade:S.tipo, timestamp:new Date().toISOString() });
+}
+
+function repetirChamada() {
+  if (S.atual) emit({ ...S.atual, timestamp:new Date().toISOString() });
+}
+</script>
+</body>
+</html>
