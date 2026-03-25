@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Pedro Scarpatti — Python Developer e Data Engineer. SQL, AI, índices reversos, pipelines de dados e processamento." />
+  <meta name="description" content="Pedro Scarpatti — Analista de BI & Dados. Pipelines ETL, dashboards operacionais, índices reversos e arquitetura de dados em escala." />
   <meta name="author" content="Pedro Scarpatti" />
   <meta name="robots" content="index, follow" />
-  <meta property="og:title" content="Pedro Scarpatti — Python Developer & Data Engineering" />
-  <meta property="og:description" content="Portfolio profissional: pipelines de dados, sistemas de busca inteligente e integração com IA." />
+  <meta property="og:title" content="Pedro Scarpatti — Analista de BI & Dados" />
+  <meta property="og:description" content="Portfolio: pipelines de dados, dashboards operacionais e arquitetura de sistemas para o setor público." />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#07071A" />
 
-  <title>Pedro Scarpatti — Python Developer &amp; Data Engineering</title>
+  <title>Pedro Scarpatti — Analista de BI & Dados</title>
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2307071A'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='18' font-weight='bold' fill='%2300D4FF'>PS</text></svg>" />
 
@@ -30,29 +30,19 @@
       --bg-card-hover: #181835;
       --border:        rgba(255,255,255,0.07);
       --border-accent: rgba(0,212,255,0.25);
-
       --text:          #EEEEF5;
       --text-2:        #9090A8;
       --text-3:        #5A5A75;
-
       --accent:        #00D4FF;
       --accent-2:      #00FF94;
       --accent-3:      #FF2D6B;
-
       --grad-hero:     linear-gradient(135deg, #00D4FF 0%, #00FF94 55%, #FF2D6B 100%);
       --grad-accent:   linear-gradient(135deg, #00D4FF, #00FF94);
-
       --font-head:     'Outfit', system-ui, sans-serif;
       --font-mono:     'Space Mono', monospace;
-
-      --r-sm: 8px;
-      --r-md: 12px;
-      --r-lg: 18px;
-      --r-xl: 24px;
-
+      --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
       --shadow-card:   0 4px 24px rgba(0,0,0,0.4);
       --shadow-glow:   0 0 40px rgba(0,212,255,0.12);
-
       --transition:    all 0.25s cubic-bezier(0.16,1,0.3,1);
     }
 
@@ -60,9 +50,7 @@
        RESET & BASE
        ============================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; font-size: 16px; }
-
     body {
       font-family: var(--font-head);
       background: var(--bg);
@@ -71,26 +59,16 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
-
     ::selection { background: rgba(0,212,255,0.25); color: var(--text); }
-
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
-
-    :focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-      border-radius: var(--r-sm);
-    }
-
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-sm); }
     a { color: inherit; text-decoration: none; transition: color 0.2s; }
     a:hover { color: var(--accent); }
-
-    img, video { max-width: 100%; display: block; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; }
-    input, textarea, select { font-family: inherit; }
+    img, video { max-width: 100%; display: block; }
 
     /* ============================================================
        UTILITIES
@@ -120,10 +98,6 @@
       from { opacity: 0; transform: translateY(28px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
     @keyframes orb1 {
       0%,100% { transform: translate(0,0) scale(1); }
       33%      { transform: translate(40px,-30px) scale(1.05); }
@@ -142,15 +116,17 @@
       from { width: 0; }
       to   { width: var(--w); }
     }
-    @keyframes countUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
     @keyframes borderPulse {
       0%,100% { border-color: rgba(0,212,255,0.15); }
       50%      { border-color: rgba(0,212,255,0.4); }
     }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes flowDot {
+      0%   { opacity: 0; transform: translateX(0); }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { opacity: 0; transform: translateX(200px); }
+    }
 
     /* ============================================================
        HEADER
@@ -164,13 +140,11 @@
       transition: var(--transition);
     }
     header.scrolled { background: rgba(7,7,26,0.95); }
-
     .header-inner {
       max-width: 1140px; margin: 0 auto; padding: 0 28px;
       height: 100%;
       display: flex; align-items: center; justify-content: space-between;
     }
-
     .logo {
       font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700;
       letter-spacing: -0.02em;
@@ -178,7 +152,6 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-
     .nav { display: flex; align-items: center; gap: 36px; }
     .nav a {
       font-size: 0.875rem; font-weight: 500; color: var(--text-2);
@@ -187,12 +160,10 @@
     .nav a::after {
       content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
       height: 1.5px; background: var(--grad-accent);
-      transform: scaleX(0); transition: transform 0.25s;
-      border-radius: 1px;
+      transform: scaleX(0); transition: transform 0.25s; border-radius: 1px;
     }
     .nav a:hover, .nav a.active { color: var(--text); }
     .nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
-
     .btn-header-cta {
       font-size: 0.8rem; font-weight: 600;
       padding: 7px 18px; border-radius: var(--r-sm);
@@ -216,7 +187,6 @@
       position: relative; overflow: hidden;
       padding: 100px 0 80px;
     }
-
     .hero__orb {
       position: absolute; border-radius: 50%;
       filter: blur(90px); pointer-events: none; z-index: 0;
@@ -239,7 +209,6 @@
       top: 40%; left: 30%;
       animation: orb1 14s ease-in-out infinite reverse;
     }
-
     .hero__grid {
       position: absolute; inset: 0; z-index: 0;
       background-image:
@@ -248,13 +217,11 @@
       background-size: 60px 60px;
       mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
     }
-
     .hero__content {
       position: relative; z-index: 1;
       max-width: 780px;
       animation: fadeUp 0.7s ease-out both;
     }
-
     .hero__badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 5px 14px 5px 10px;
@@ -272,41 +239,34 @@
       box-shadow: 0 0 6px var(--accent-2);
       animation: pulse 2s ease-in-out infinite;
     }
-
     .hero h1 {
       font-size: clamp(44px, 7.5vw, 80px);
       font-weight: 900; line-height: 1.0;
-      letter-spacing: -0.03em;
-      margin-bottom: 12px;
+      letter-spacing: -0.03em; margin-bottom: 12px;
       animation: fadeUp 0.6s ease-out 0.15s both;
     }
-
     .hero__role {
       font-size: clamp(18px, 2.5vw, 24px);
       font-weight: 400; color: var(--text-2);
       margin-bottom: 8px;
       animation: fadeUp 0.6s ease-out 0.2s both;
     }
-
     .hero__stack {
       font-family: var(--font-mono); font-size: 0.8rem;
       color: var(--accent); letter-spacing: 0.05em;
       margin-bottom: 28px;
       animation: fadeUp 0.6s ease-out 0.25s both;
     }
-
     .hero__desc {
       font-size: 1.05rem; color: var(--text-2);
       max-width: 540px; line-height: 1.75;
       margin-bottom: 40px;
       animation: fadeUp 0.6s ease-out 0.3s both;
     }
-
     .hero__cta {
       display: flex; gap: 14px; flex-wrap: wrap;
       animation: fadeUp 0.6s ease-out 0.4s both;
     }
-
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 12px 26px; border-radius: var(--r-md);
@@ -325,13 +285,20 @@
       color: #07071A;
     }
     .btn--ghost {
-      background: transparent;
-      color: var(--text-2);
+      background: transparent; color: var(--text-2);
       border: 1px solid var(--border);
     }
     .btn--ghost:hover {
-      border-color: rgba(255,255,255,0.2);
-      color: var(--text);
+      border-color: rgba(255,255,255,0.2); color: var(--text);
+      transform: translateY(-2px);
+    }
+    .btn--accent-outline {
+      background: transparent; color: var(--accent);
+      border: 1px solid var(--border-accent);
+    }
+    .btn--accent-outline:hover {
+      background: rgba(0,212,255,0.08);
+      border-color: var(--accent);
       transform: translateY(-2px);
     }
 
@@ -340,7 +307,6 @@
        ============================================================ */
     section { padding: 100px 0; }
     section + section { border-top: 1px solid var(--border); }
-
     .section__header { margin-bottom: 56px; }
     .section__title {
       font-size: clamp(30px, 4vw, 46px);
@@ -371,7 +337,6 @@
       box-shadow: var(--shadow-glow);
       transform: translateY(-3px);
     }
-
     .featured__badge {
       display: inline-flex; align-items: center; gap: 6px;
       font-family: var(--font-mono); font-size: 0.68rem;
@@ -381,20 +346,17 @@
       border-radius: 99px; padding: 3px 12px;
       margin-bottom: 18px;
     }
-
     .featured__title {
       font-size: clamp(22px, 3vw, 32px);
       font-weight: 800; letter-spacing: -0.02em;
       margin-bottom: 16px;
     }
-
     .featured__problem,
     .featured__solution {
       font-size: 0.95rem; color: var(--text-2);
       line-height: 1.75; margin-bottom: 12px;
     }
     .featured__problem strong, .featured__solution strong { color: var(--text); }
-
     .featured__tech {
       display: flex; flex-wrap: wrap; gap: 8px;
       margin: 20px 0 28px;
@@ -409,7 +371,6 @@
       transition: var(--transition);
     }
     .tag:hover { background: rgba(0,212,255,0.14); border-color: rgba(0,212,255,0.3); }
-
     .featured__features {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -420,12 +381,10 @@
       font-size: 0.875rem; color: var(--text-2); line-height: 1.5;
     }
     .featured__feature::before {
-      content: '▹';
-      color: var(--accent);
+      content: '▹'; color: var(--accent);
       font-family: var(--font-mono);
       margin-top: 2px; flex-shrink: 0;
     }
-
     .featured__actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
     /* ============================================================
@@ -449,12 +408,13 @@
     }
     .card:nth-child(1) { animation-delay: 0.05s; }
     .card:nth-child(2) { animation-delay: 0.15s; }
+    .card:nth-child(3) { animation-delay: 0.25s; }
+    .card:nth-child(4) { animation-delay: 0.35s; }
     .card:hover {
       border-color: var(--border-accent);
       transform: translateY(-5px);
       box-shadow: var(--shadow-card), var(--shadow-glow);
     }
-
     .card__header {
       padding: 24px 24px 20px;
       border-bottom: 1px solid var(--border);
@@ -463,7 +423,14 @@
     .card__icon { font-size: 28px; margin-bottom: 8px; }
     .card__title { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
     .card__subtitle { font-size: 0.75rem; color: var(--text-3); font-weight: 400; }
-
+    .card__badge {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      padding: 2px 8px; border-radius: 4px;
+      font-weight: 700; letter-spacing: 0.05em;
+    }
+    .card__badge--data { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+    .card__badge--infra { background: rgba(0,255,148,0.1); color: var(--accent-2); border: 1px solid rgba(0,255,148,0.2); }
+    .card__badge--prod  { background: rgba(255,45,107,0.1); color: var(--accent-3); border: 1px solid rgba(255,45,107,0.2); }
     .card__body { padding: 20px 24px 24px; }
     .card__desc { font-size: 0.875rem; color: var(--text-2); line-height: 1.65; margin-bottom: 12px; }
     .card__stack { font-size: 0.75rem; color: var(--text-3); line-height: 1.6; margin-bottom: 16px; }
@@ -483,17 +450,15 @@
       gap: 60px; align-items: start;
     }
     @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
-
     .about__text p {
       font-size: 0.975rem; color: var(--text-2);
       line-height: 1.8; margin-bottom: 14px;
     }
     .about__text p strong { color: var(--text); }
-
-    .about__skills {
+    .about__chips {
       display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px;
     }
-    .skill-chip {
+    .chip {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 99px;
@@ -502,12 +467,11 @@
       color: var(--text-2);
       transition: var(--transition);
     }
-    .skill-chip:hover {
+    .chip:hover {
       border-color: rgba(0,212,255,0.3);
       color: var(--accent);
       background: rgba(0,212,255,0.06);
     }
-
     .about__metrics {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -517,20 +481,14 @@
     }
     .metrics-grid {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 16px; margin-bottom: 24px;
+      gap: 16px; margin-bottom: 28px;
     }
     .metric {
       background: rgba(0,212,255,0.04);
       border: 1px solid var(--border);
       border-radius: var(--r-md);
       padding: 16px; text-align: center;
-      animation: countUp 0.5s ease-out both;
     }
-    .metric:nth-child(1) { animation-delay: 0.1s; }
-    .metric:nth-child(2) { animation-delay: 0.2s; }
-    .metric:nth-child(3) { animation-delay: 0.3s; }
-    .metric:nth-child(4) { animation-delay: 0.4s; }
-
     .metric__val {
       font-size: 1.8rem; font-weight: 800;
       background: var(--grad-accent);
@@ -544,18 +502,32 @@
       margin-top: 6px; display: block;
     }
 
-    .skill-bars { display: flex; flex-direction: column; gap: 14px; }
-    .skill-bar__header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-    .skill-bar__name { font-size: 0.78rem; font-weight: 500; color: var(--text-2); }
-    .skill-bar__pct { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); }
-    .skill-bar__track {
-      height: 4px; background: rgba(255,255,255,0.06);
-      border-radius: 2px; overflow: hidden;
+    /* Skills - clean categories, no progress bars */
+    .skill-list { display: flex; flex-direction: column; gap: 12px; }
+    .skill-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
     }
-    .skill-bar__fill {
-      height: 100%; background: var(--grad-accent);
-      border-radius: 2px;
-      animation: fillBar 1.4s cubic-bezier(0.16,1,0.3,1) forwards;
+    .skill-row:last-child { border-bottom: none; }
+    .skill-name { font-size: 0.85rem; font-weight: 500; color: var(--text-2); }
+    .skill-level {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      font-weight: 700; letter-spacing: 0.08em;
+      padding: 3px 10px; border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .skill-level--daily {
+      background: rgba(0,255,148,0.1); color: var(--accent-2);
+      border: 1px solid rgba(0,255,148,0.2);
+    }
+    .skill-level--project {
+      background: rgba(0,212,255,0.08); color: var(--accent);
+      border: 1px solid rgba(0,212,255,0.15);
+    }
+    .skill-level--learning {
+      background: rgba(90,90,117,0.1); color: var(--text-3);
+      border: 1px solid rgba(90,90,117,0.15);
     }
 
     /* ============================================================
@@ -568,7 +540,6 @@
     }
     @media (max-width: 900px) { .skills-grid { grid-template-columns: repeat(2,1fr); } }
     @media (max-width: 580px) { .skills-grid { grid-template-columns: 1fr; } }
-
     .skill-group {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -577,7 +548,6 @@
       transition: var(--transition);
     }
     .skill-group:hover { border-color: var(--border-accent); transform: translateY(-3px); }
-
     .skill-group__title {
       font-size: 0.8rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.08em;
@@ -585,7 +555,6 @@
       padding-bottom: 14px; margin-bottom: 18px;
       border-bottom: 1px solid var(--border);
     }
-
     .skill-group__list { display: flex; flex-direction: column; gap: 12px; }
     .skill-item { display: flex; flex-direction: column; gap: 6px; }
     .skill-item__header { display: flex; justify-content: space-between; }
@@ -650,7 +619,6 @@
       padding: 24px;
     }
     .modal.active { display: flex; }
-
     .modal__box {
       width: 100%; max-width: 1200px;
       height: 88vh;
@@ -667,10 +635,7 @@
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
-    .modal__title {
-      font-size: 0.9rem; font-weight: 600;
-      color: var(--text-2);
-    }
+    .modal__title { font-size: 0.9rem; font-weight: 600; color: var(--text-2); }
     .modal__close {
       width: 36px; height: 36px;
       background: rgba(255,255,255,0.05);
@@ -730,13 +695,14 @@
 
         <h1>Pedro<br><span class="gradient-text">Scarpatti</span></h1>
 
-        <p class="hero__role">Python Developer &amp; Data Engineering</p>
-        <p class="hero__stack">Python · SQL · AI · Processamento de Dados · Buscas</p>
+        <p class="hero__role">Analista de BI & Dados</p>
+        <p class="hero__stack">Python · SQL · ETL · Dashboards · Arquitetura de Dados</p>
 
         <p class="hero__desc">
-          Desenvolvo pipelines de dados, integrações com modelos de IA
-          e sistemas de busca inteligente. Especialidades: índices reversos,
-          processamento de texto e consultas otimizadas em grande escala.
+          Construo o ciclo completo: dado bruto vira pipeline ETL,
+          alimenta dashboards operacionais e expõe APIs para consumo.
+          Atuação atual na SESA/SUS — sistemas que processam milhares de
+          atendimentos e integritam dados para o poder público.
         </p>
 
         <div class="hero__cta">
@@ -752,20 +718,20 @@
     <div class="container">
       <div class="section__header">
         <span class="section-label">// projetos</span>
-        <h2 class="section__title gradient-text">Projetos Principais</h2>
+        <h2 class="section__title gradient-text">Projetos &amp; Demonstrações</h2>
       </div>
 
       <!-- FEATURED: PIPELINE SIMULATOR -->
-      <div class="featured" onclick="openModal(2)" style="cursor:pointer;">
-        <div class="featured__badge">⭐ projeto principal</div>
-        <h3 class="featured__title">Simulador de Pipeline de Processamento de Dados</h3>
+      <div class="featured" onclick="openModal(3)" style="cursor:pointer;">
+        <div class="featured__badge">⭐ projeto destaque — arquitetura</div>
+        <h3 class="featured__title">Simulador de Pipeline ETL com Fila + Idempotência</h3>
 
         <p class="featured__problem">
-          <strong>Problema:</strong> Pipelines de dados falham silenciosamente em produção —
-          sem visibilidade de estado, duplicidade não detectada e logs inexistentes.
+          <strong>Problema:</strong> Pipelines de dados em produção falham silenciosamente —
+          sem visibilidade de estado, duplicidade não detectada, logs inexistentes.
         </p>
         <p class="featured__solution">
-          <strong>Como funciona:</strong> Interface que simula arquitetura real de fila + processor
+          <strong>Solução:</strong> Interface interativa que simula arquitetura real de fila + processor
           + idempotência. Jobs passam por estados (PENDENTE → PROCESSANDO → CONCLUÍDO/ERRO),
           deduplicação via hash, log estruturado em tempo real e simulação de falhas configurável.
         </p>
@@ -777,21 +743,22 @@
           <span class="tag">Event Bus</span>
           <span class="tag">Structured Logging</span>
           <span class="tag">Retry Pattern</span>
-          <span class="tag">ETL Pattern</span>
+          <span class="tag">ETL</span>
           <span class="tag">Async/Await</span>
+          <span class="tag">Module Architecture</span>
         </div>
 
         <div class="featured__features">
           <div class="featured__feature">Fila FIFO com prioridade e controle de concorrência (max 3 workers simultâneos)</div>
           <div class="featured__feature">Hash de idempotência detecta e bloqueia jobs duplicados antes do processamento</div>
           <div class="featured__feature">Estados PENDENTE → PROCESSANDO → CONCLUÍDO / ERRO com timestamps precisos</div>
-          <div class="featured__feature">Log estruturado multi-nível: DEBUG, INFO, SUCCESS, WARNING, ERROR — exportável em JSON</div>
+          <div class="featured__feature">Log estruturado multi-nível: DEBUG, INFO, SUCCESS, WARNING, ERROR — exportável JSON</div>
           <div class="featured__feature">Simulação de falhas configurável (0–50%) com erros realistas de produção</div>
-          <div class="featured__feature">Módulos separados: services / processors / validators — mentalidade de engenharia real</div>
+          <div class="featured__feature">Módulos separados: services / processors / validators / utils — mentalidade de engenharia real</div>
         </div>
 
         <div class="featured__actions">
-          <button class="btn btn--primary" onclick="event.stopPropagation(); openModal(2)">
+          <button class="btn btn--primary" onclick="event.stopPropagation(); openModal(3)">
             Abrir Demo →
           </button>
           <a href="https://github.com/pedro-scarpatti" target="_blank" class="btn btn--ghost" onclick="event.stopPropagation()">
@@ -807,14 +774,16 @@
           <div class="card__header">
             <div>
               <div class="card__icon">🏥</div>
-              <h3 class="card__title">Sistema de Senhas e Atendimentos</h3>
+              <h3 class="card__title">Painel Operacional de Atendimento — SESA</h3>
               <p class="card__subtitle">Arquitetura Monolítica · JavaScript Puro</p>
             </div>
+            <span class="card__badge card__badge--prod">Produção</span>
           </div>
           <div class="card__body">
             <p class="card__desc">
-              Dor do paciente: filas desorganizadas, sem visibilidade em tempo real e dados fragmentados.
-              Solução: painel operacional com controle de guichês, triage e dashboard ao vivo.
+              Sistema em produção na SESA gerenciando fluxo de atendimento de unidades de saúde.
+              Exibição pública de filas, controle de guichês, triage e dashboard ao vivo.
+              Milhares de atendimentos processados diariamente.
             </p>
             <p class="card__stack">
               <strong>Stack:</strong> HTML5, CSS3, JavaScript ES6, LocalStorage, Event-driven UI
@@ -825,23 +794,73 @@
           </div>
         </div>
 
-        <div class="card" onclick="openModal(1)">
+        <div class="card" onclick="openModal(2)">
           <div class="card__header">
             <div>
-              <div class="card__icon">✍️</div>
-              <h3 class="card__title">Editor de Artigos</h3>
-              <p class="card__subtitle">Arquitetura Monolítica · JavaScript Puro</p>
+              <div class="card__icon">📊</div>
+              <h3 class="card__title">Dashboard Analytics — ETL Monolith</h3>
+              <p class="card__subtitle">Dashboard dark com métricas ao vivo</p>
             </div>
+            <span class="card__badge card__badge--data">Dados</span>
           </div>
           <div class="card__body">
             <p class="card__desc">
-              Dor do redator: sem controle de formatação, ferramentas limitadas e publicação engessada.
-              Solução: editor WYSIWYG com toolbar contextual e preview em tempo real.
+              Dashboard analítico que demonstra visualização de dados em tempo real.
+              Gráficos SVG animados, métricas KPIs, activity feed e barras de skill.
+              mentalidade de engineering: módulos separados, animações por estado.
             </p>
             <p class="card__stack">
-              <strong>Stack:</strong> HTML5, CSS3, JavaScript ES6, ContentEditable API, LocalStorage
+              <strong>Stack:</strong> HTML5, CSS3, JavaScript ES6, SVG, CSS Animations
+            </p>
+            <a href="#" class="card__link" onclick="openModal(2); return false;">
+              Ver projeto <span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card" onclick="openModal(1)">
+          <div class="card__header">
+            <div>
+              <div class="card__icon">🔍</div>
+              <h3 class="card__title">Motor de Busca com Índice Reverso + TF-IDF</h3>
+              <p class="card__subtitle">Busca rankeada em corpus de dados</p>
+            </div>
+            <span class="card__badge card__badge--data">Dados</span>
+          </div>
+          <div class="card__body">
+            <p class="card__desc">
+              Implementação completa de um motor de busca: tokenização, stemmer,
+              índice reverso e ranking TF-IDF/BM25. Visualização interativa do
+              índice, análise de consulta e snippets com highlights.
+            </p>
+            <p class="card__stack">
+              <strong>Stack:</strong> JavaScript ES6, TF-IDF, Inverted Index, Tokenização
             </p>
             <a href="#" class="card__link" onclick="openModal(1); return false;">
+              Ver projeto <span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card" onclick="openModal(4)">
+          <div class="card__header">
+            <div>
+              <div class="card__icon">🌐</div>
+              <h3 class="card__title">API Gateway — Arquitetura de Microserviços</h3>
+              <p class="card__subtitle">Diagrama interativo de arquitetura</p>
+            </div>
+            <span class="card__badge card__badge--infra">Infra</span>
+          </div>
+          <div class="card__body">
+            <p class="card__desc">
+              Demonstração visual de arquitetura de microserviços: API Gateway,
+              roteamento, rate limiting, autenticação JWT, dead letter queues,
+              circuit breaker e padrões de comunicação entre serviços.
+            </p>
+            <p class="card__stack">
+              <strong>Stack:</strong> HTML5, CSS3, JavaScript ES6, SVG, Arquitetura de Sistemas
+            </p>
+            <a href="#" class="card__link" onclick="openModal(4); return false;">
               Ver projeto <span>→</span>
             </a>
           </div>
@@ -862,32 +881,36 @@
       <div class="about-grid">
         <div class="about__text">
           <p>
-            Desenvolvedor Python com foco em <strong>processamento de dados e IA</strong>.
-            Trabalho com extração, transformação e carga de dados em escala, integração com
-            modelos de linguagem e construção de sistemas de busca inteligente.
+            Analista de BI e dados com atuação em <strong>gestão pública (SESA/SUS)</strong>,
+            onde desenvolvo sistemas internos que processam dados operacionais e
+            suportam decisões estratégicas. Historinha: comecei como estagiário
+            de geoprocessamento, fui pra desenvolvimento web e acabei encontrando
+            meu espaço em dados — onde arquitetura de sistemas e análise se encontram.
           </p>
           <p>
-            Minhas especialidades incluem <strong>índice reverso</strong>,
-            <strong>otimização de consultas SQL</strong>, pipelines de dados
-            e arquiteturas que lidam com grandes volumes de informação.
-            Trabalho no setor público (SESA/SUS) construindo sistemas de integração
-            e análise operacional.
+            Minha especialidade é <strong>fechar o ciclo completo</strong>: extrair dados de
+            fontes diversas, transformar em pipelines robustos e disponibilizar
+            através de dashboards e APIs. Entendo tanto o lado de dados (SQL, ETL,
+            índice reverso, TF-IDF) quanto o lado de produto (dashboards operacionais,
+            sistemas de fila, arquiteturas de integração).
           </p>
           <p>
-            Este portfólio demonstra a <strong>mentalidade de engenharia de dados</strong>:
-            não projetinhos de estudo, mas sistemas que processam, indexam e pesquisam
-            informação em escala.
+            <strong>Fluente em inglês (C2)</strong> — leio documentação, assisto talks,
+            trabalho com ferramentas gringas sem barreira. Sueco intermediário (B2)
+            por爱好, atualmente morando no Brasil mas com um pé na Suécia.
           </p>
 
-          <div class="about__skills">
-            <span class="skill-chip">Python</span>
-            <span class="skill-chip">SQL / PostgreSQL</span>
-            <span class="skill-chip">AI / LLMs</span>
-            <span class="skill-chip">Índices Reversos</span>
-            <span class="skill-chip">ETL / Pipelines</span>
-            <span class="skill-chip">Busca Semântica</span>
-            <span class="skill-chip">JavaScript ES6+</span>
-            <span class="skill-chip">Git</span>
+          <div class="about__chips">
+            <span class="chip">Python</span>
+            <span class="chip">SQL (SQL Server, MySQL)</span>
+            <span class="chip">ETL / Pipelines</span>
+            <span class="chip">Dashboards Operacionais</span>
+            <span class="chip">Índice Reverso</span>
+            <span class="chip">OCR</span>
+            <span class="chip">JavaScript ES6+</span>
+            <span class="chip">React</span>
+            <span class="chip">Git</span>
+            <span class="chip">Inglês C2</span>
           </div>
         </div>
 
@@ -898,55 +921,51 @@
               <span class="metric__label">Anos em produção</span>
             </div>
             <div class="metric">
-              <span class="metric__val">3</span>
-              <span class="metric__label">Projetos principais</span>
+              <span class="metric__val">4</span>
+              <span class="metric__label">Projetos demonstráveis</span>
             </div>
             <div class="metric">
-              <span class="metric__val">100%</span>
-              <span class="metric__label">JavaScript puro</span>
+              <span class="metric__val">SESA</span>
+              <span class="metric__label">Cliente atual</span>
             </div>
             <div class="metric">
-              <span class="metric__val">Python</span>
-              <span class="metric__label">Linguagem principal</span>
+              <span class="metric__val">C2</span>
+              <span class="metric__label">Inglês</span>
             </div>
           </div>
 
-          <div class="skill-bars">
-            <div class="skill-bar">
-              <div class="skill-bar__header">
-                <span class="skill-bar__name">Python</span>
-                <span class="skill-bar__pct">75%</span>
-              </div>
-              <div class="skill-bar__track">
-                <div class="skill-bar__fill" style="--w:75%;width:0;width:var(--w)"></div>
-              </div>
+          <div class="skill-list">
+            <div class="skill-row">
+              <span class="skill-name">SQL / Banco de Dados</span>
+              <span class="skill-level skill-level--daily">Uso diário</span>
             </div>
-            <div class="skill-bar">
-              <div class="skill-bar__header">
-                <span class="skill-bar__name">SQL / PostgreSQL</span>
-                <span class="skill-bar__pct">80%</span>
-              </div>
-              <div class="skill-bar__track">
-                <div class="skill-bar__fill" style="--w:80%;width:0;width:var(--w)"></div>
-              </div>
+            <div class="skill-row">
+              <span class="skill-name">Python (análise e automação)</span>
+              <span class="skill-level skill-level--daily">Uso diário</span>
             </div>
-            <div class="skill-bar">
-              <div class="skill-bar__header">
-                <span class="skill-bar__name">AI / LLMs</span>
-                <span class="skill-bar__pct">65%</span>
-              </div>
-              <div class="skill-bar__track">
-                <div class="skill-bar__fill" style="--w:65%;width:0;width:var(--w)"></div>
-              </div>
+            <div class="skill-row">
+              <span class="skill-name">ETL / Pipelines de Dados</span>
+              <span class="skill-level skill-level--daily">Uso diário</span>
             </div>
-            <div class="skill-bar">
-              <div class="skill-bar__header">
-                <span class="skill-bar__name">JavaScript</span>
-                <span class="skill-bar__pct">58%</span>
-              </div>
-              <div class="skill-bar__track">
-                <div class="skill-bar__fill" style="--w:58%;width:0;width:var(--w)"></div>
-              </div>
+            <div class="skill-row">
+              <span class="skill-name">Dashboards (Power BI, Recharts)</span>
+              <span class="skill-level skill-level--daily">Uso diário</span>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Índice Reverso / TF-IDF</span>
+              <span class="skill-level skill-level--project">Projeto</span>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">OCR / Extração de Dados</span>
+              <span class="skill-level skill-level--project">Projeto</span>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">React / JavaScript</span>
+              <span class="skill-level skill-level--project">Projeto</span>
+            </div>
+            <div class="skill-row">
+              <span class="skill-name">Cloud (AWS / GCP)</span>
+              <span class="skill-level skill-level--learning">Aprendendo</span>
             </div>
           </div>
         </div>
@@ -965,21 +984,21 @@
       <div class="skills-grid">
 
         <div class="skill-group">
-          <h3 class="skill-group__title">Linguagens &amp; Dados</h3>
+          <h3 class="skill-group__title">Dados &amp; BI</h3>
           <div class="skill-group__list">
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">Python</span>
-                <span class="skill-item__level">Avançado</span>
+                <span class="skill-item__name">SQL / PostgreSQL / SQL Server</span>
+                <span class="skill-item__level">Uso diário</span>
               </div>
               <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:75%;width:0;width:var(--w)"></div>
+                <div class="skill-item__fill" style="--w:85%;width:0;width:var(--w)"></div>
               </div>
             </div>
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">SQL / PostgreSQL</span>
-                <span class="skill-item__level">Avançado</span>
+                <span class="skill-item__name">Python (Pandas, Scripts, ETL)</span>
+                <span class="skill-item__level">Uso diário</span>
               </div>
               <div class="skill-item__track">
                 <div class="skill-item__fill" style="--w:80%;width:0;width:var(--w)"></div>
@@ -987,11 +1006,20 @@
             </div>
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">JavaScript ES6+</span>
-                <span class="skill-item__level">Intermediário</span>
+                <span class="skill-item__name">Power BI / Dashboards</span>
+                <span class="skill-item__level">Uso diário</span>
               </div>
               <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:58%;width:0;width:var(--w)"></div>
+                <div class="skill-item__fill" style="--w:78%;width:0;width:var(--w)"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-item__header">
+                <span class="skill-item__name">MongoDB</span>
+                <span class="skill-item__level">Projeto</span>
+              </div>
+              <div class="skill-item__track">
+                <div class="skill-item__fill" style="--w:65%;width:0;width:var(--w)"></div>
               </div>
             </div>
           </div>
@@ -1002,35 +1030,35 @@
           <div class="skill-group__list">
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">LLMs / OpenAI API</span>
-                <span class="skill-item__level">Intermediário</span>
+                <span class="skill-item__name">OCR (Tesseract / API)</span>
+                <span class="skill-item__level">Projeto</span>
               </div>
               <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:65%;width:0;width:var(--w)"></div>
+                <div class="skill-item__fill" style="--w:72%;width:0;width:var(--w)"></div>
               </div>
             </div>
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">ETL / Pipelines</span>
-                <span class="skill-item__level">Intermediário</span>
+                <span class="skill-item__name">Índice Reverso / BM25</span>
+                <span class="skill-item__level">Projeto</span>
               </div>
               <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:68%;width:0;width:var(--w)"></div>
+                <div class="skill-item__fill" style="--w:70%;width:0;width:var(--w)"></div>
               </div>
             </div>
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">Índices Reversos</span>
-                <span class="skill-item__level">Intermediário</span>
+                <span class="skill-item__name">LLMs / Integração IA</span>
+                <span class="skill-item__level">Aprendendo</span>
               </div>
               <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:60%;width:0;width:var(--w)"></div>
+                <div class="skill-item__fill" style="--w:55%;width:0;width:var(--w)"></div>
               </div>
             </div>
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">Busca Semântica</span>
-                <span class="skill-item__level">Básico</span>
+                <span class="skill-item__name">Embeddings / Busca Vetorial</span>
+                <span class="skill-item__level">Aprendendo</span>
               </div>
               <div class="skill-item__track">
                 <div class="skill-item__fill" style="--w:45%;width:0;width:var(--w)"></div>
@@ -1040,33 +1068,42 @@
         </div>
 
         <div class="skill-group">
-          <h3 class="skill-group__title">DevOps &amp; Tools</h3>
+          <h3 class="skill-group__title">Desenvolvimento &amp; Infra</h3>
           <div class="skill-group__list">
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">Git</span>
-                <span class="skill-item__level">Intermediário</span>
+                <span class="skill-item__name">JavaScript ES6+ / TypeScript</span>
+                <span class="skill-item__level">Projeto</span>
               </div>
               <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:75%;width:0;width:var(--w)"></div>
+                <div class="skill-item__fill" style="--w:70%;width:0;width:var(--w)"></div>
               </div>
             </div>
             <div class="skill-item">
               <div class="skill-item__header">
-                <span class="skill-item__name">Docker</span>
-                <span class="skill-item__level">Básico</span>
-              </div>
-              <div class="skill-item__track">
-                <div class="skill-item__fill" style="--w:42%;width:0;width:var(--w)"></div>
-              </div>
-            </div>
-            <div class="skill-item">
-              <div class="skill-item__header">
-                <span class="skill-item__name">HTML / CSS</span>
-                <span class="skill-item__level">Intermediário</span>
+                <span class="skill-item__name">React / Astro</span>
+                <span class="skill-item__level">Projeto</span>
               </div>
               <div class="skill-item__track">
                 <div class="skill-item__fill" style="--w:62%;width:0;width:var(--w)"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-item__header">
+                <span class="skill-item__name">Git / GitHub</span>
+                <span class="skill-item__level">Uso diário</span>
+              </div>
+              <div class="skill-item__track">
+                <div class="skill-item__fill" style="--w:82%;width:0;width:var(--w)"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-item__header">
+                <span class="skill-item__name">Docker / Cloud (AWS/GCP)</span>
+                <span class="skill-item__level">Aprendendo</span>
+              </div>
+              <div class="skill-item__track">
+                <div class="skill-item__fill" style="--w:40%;width:0;width:var(--w)"></div>
               </div>
             </div>
           </div>
@@ -1085,9 +1122,9 @@
       </div>
 
       <p class="contact__desc">
-        Procuro oportunidades em Python, dados ou IA — remote ou híbrido.
-        Se precisa de alguém que entende como processar, indexar e pesquisar
-        grandes volumes de dados, chama.
+        Procuro oportunidades em BI, dados ou desenvolvimento — remote ou híbrido.
+        Se precisa de alguém que entende como pipeline, SQL, dashboards e
+        arquitetura de sistemas se conectam, chama.
       </p>
 
       <div class="contact__links">
@@ -1126,9 +1163,11 @@
 
   <script>
     const PROJECTS = [
-      { title: 'Sistema de Senhas e Atendimentos',    file: 'projects/Gerenciador%20de%20Senhas.html' },
-      { title: 'Editor de Artigos',                   file: 'projects/monolithic-article-editor.html' },
-      { title: 'Simulador de Pipeline de Dados',      file: 'projects/pipeline-simulator.html' },
+      { title: 'Painel Operacional SESA — Atendimentos',  file: 'projects/Gerenciador%20de%20Senhas.html' },
+      { title: 'Motor de Busca — Índice Reverso + TF-IDF', file: 'projects/motor-de-busca.html' },
+      { title: 'Dashboard Analytics — ETL Monolith',       file: 'projects/dashboard-monolith.html' },
+      { title: 'Simulador de Pipeline ETL',                file: 'projects/pipeline-simulator.html' },
+      { title: 'API Gateway — Arquitetura de Microserviços', file: 'projects/api-gateway.html' },
     ];
 
     function openModal(index) {
