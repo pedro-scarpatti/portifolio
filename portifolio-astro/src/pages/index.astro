@@ -1,0 +1,483 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroTerminal from '../components/HeroTerminal';
+import MetricCounter from '../components/MetricCounter';
+import ProjectCard from '../components/ProjectCard.astro';
+import SkillBar from '../components/SkillBar.astro';
+
+const projects = [
+  {
+    number: '01',
+    title: 'Sistema de Busca Semântica',
+    problem: '"BM25 + embeddings: como fazer busca semântica em 500k documentos sem sacrificar precisão lexical"',
+    tags: ['Python', 'pgvector', 'FastAPI', 'React TS'],
+    metric: 'precision@10',
+    value: '91%',
+    demoUrl: '/projects/search-engine',
+    codeUrl: 'https://github.com/pedro-scarpatti/search-engine',
+  },
+  {
+    number: '02',
+    title: 'Dashboard de Saúde Pública',
+    problem: '"Como agregar 12 fontes distintas do DataSUS em indicadores que 2.000 profissionais usam pra tomar decisão"',
+    tags: ['Python', 'DataSUS', 'FastAPI', 'React TS', 'Recharts'],
+    metric: 'uptime',
+    value: '99.8%',
+    demoUrl: '/projects/health-dashboard',
+    codeUrl: 'https://github.com/pedro-scarpatti/health-dashboard',
+  },
+  {
+    number: '03',
+    title: 'Pipeline ETL com Prefect',
+    problem: '"Como normalizar DBF de sistemas DOS ANOS 90 e CSV sem encoding com auditoria completa de cada execução"',
+    tags: ['Python', 'Prefect', 'polars', 'PostgreSQL'],
+    metric: 'fontes',
+    value: '12',
+    demoUrl: '/projects/etl-pipeline',
+    codeUrl: 'https://github.com/pedro-scarpatti/etl-pipeline',
+  },
+  {
+    number: '04',
+    title: 'API RAG com LLM',
+    problem: '"RAG com cross-encoder rerank: chat que responde com fontes citeáveis, latência < 2s, sem vendor lock-in"',
+    tags: ['FastAPI', 'LangChain', 'pgvector', 'Ollama'],
+    metric: 'latência',
+    value: '<2s',
+    demoUrl: '/projects/rag-api',
+    codeUrl: 'https://github.com/pedro-scarpatti/rag-api',
+  },
+];
+
+const skills = [
+  // Core — uso em produção
+  { category: 'CORE', items: [
+    { name: 'Python (Pandas, polars, ETL)', level: 'produção / 2+ anos', width: 90 },
+    { name: 'SQL / PostgreSQL', level: 'produção / 2+ anos', width: 88 },
+    { name: 'FastAPI', level: 'produção', width: 82 },
+    { name: 'Git / GitHub', level: 'uso diário', width: 85 },
+  ]},
+  // Data Engineering
+  { category: 'DATA ENGINEERING', items: [
+    { name: 'ETL / Pipelines', level: 'produção', width: 85 },
+    { name: 'pgvector / Vector Search', level: 'projeto', width: 72 },
+    { name: 'Airflow / Prefect', level: 'aprendendo', width: 55 },
+    { name: 'Redis / Cache', level: 'projeto', width: 68 },
+  ]},
+  // AI / ML
+  { category: 'AI & ML', items: [
+    { name: 'LLM APIs (OpenAI, Ollama)', level: 'projeto', width: 75 },
+    { name: 'RAG / Retrieval', level: 'projeto', width: 70 },
+    { name: 'Embeddings / Similarity', level: 'projeto', width: 65 },
+    { name: 'Fine-tuning', level: 'aprendendo', width: 40 },
+  ]},
+  // Frontend
+  { category: 'FRONTEND', items: [
+    { name: 'React TypeScript', level: 'dashboards', width: 72 },
+    { name: 'Tailwind CSS', level: 'uso diário', width: 80 },
+    { name: 'Astro', level: 'projeto', width: 65 },
+    { name: 'Recharts / D3', level: 'dashboards', width: 70 },
+  ]},
+];
+
+const metrics = [
+  { value: 500000, suffix: '+', label: 'documentos\nindexados', mono: true },
+  { value: 47, suffix: 'ms', label: 'latência p99\nde busca', mono: true },
+  { value: 50000, suffix: '/mês', label: 'registros\nprocessados', mono: true },
+  { value: 2000, suffix: '+', label: 'usuários\nativos', mono: false },
+];
+---
+
+<Layout>
+
+  <!-- ── HERO ── -->
+  <section class="relative min-h-[calc(100vh-68px)] flex items-center overflow-hidden" style="padding: 6rem 0 5rem;">
+
+    <!-- Grid background -->
+    <div class="grid-bg"></div>
+
+    <!-- Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="container relative z-10">
+      <div class="grid lg:grid-cols-5 gap-12 items-center">
+
+        <!-- Left: Text content -->
+        <div class="lg:col-span-3">
+          <!-- Badge -->
+          <div class="badge badge--available mb-8 animate-fade-up">
+            Disponível para oportunidades
+          </div>
+
+          <!-- Name -->
+          <h1 class="text-6xl lg:text-7xl font-black tracking-tight mb-3 animate-fade-up delay-100">
+            Pedro<br/>
+            <span class="gradient-text">Scarpatti</span>
+          </h1>
+
+          <!-- Role -->
+          <p class="text-lg mb-2 font-medium animate-fade-up delay-200" style="color: var(--color-text-secondary);">
+            Data Engineer · ML Engineering · Python Backend
+          </p>
+
+          <!-- Stack tags -->
+          <div class="flex flex-wrap gap-2 mb-8 animate-fade-up delay-300">
+            <span class="font-mono text-xs" style="color: var(--color-accent-green);">Python</span>
+            <span class="text-muted">·</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-secondary);">SQL</span>
+            <span class="text-muted">·</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-secondary);">FastAPI</span>
+            <span class="text-muted">·</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-secondary);">pgvector</span>
+            <span class="text-muted">·</span>
+            <span class="font-mono text-xs" style="color: var(--color-text-secondary);">React TS</span>
+          </div>
+
+          <!-- Description -->
+          <p class="text-base leading-relaxed mb-10 animate-fade-up delay-400 max-w-xl" style="color: var(--color-text-secondary);">
+            <strong style="color: var(--color-text-primary);">Sistemas em produção:</strong> motor de busca processando <strong style="color: var(--color-text-primary);">500k+ documentos</strong> com latência <strong style="color: var(--color-text-primary);">&lt;50ms</strong>, pipelines ETL movendo <strong style="color: var(--color-text-primary);">50k+ registros mensais</strong>, dashboards usados por <strong style="color: var(--color-text-primary);">2.000+ profissionais</strong> em 81 unidades de saúde. Perfil full-cycle: da modelagem de dados ao deploy.
+          </p>
+
+          <!-- CTAs -->
+          <div class="flex flex-wrap gap-4 animate-fade-up delay-500">
+            <a href="#projetos" class="btn btn--primary">Ver Projetos</a>
+            <a href="#contato" class="btn btn--ghost">Conversar →</a>
+            <a href="https://github.com/pedro-scarpatti" target="_blank" class="btn btn--ghost">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Terminal -->
+        <div class="lg:col-span-2">
+          <HeroTerminal client:load />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── METRICS ── -->
+  <section class="py-16" style="border-top: 1px solid var(--color-border);">
+    <div class="container">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {metrics.map((m, i) => (
+          <MetricCounter
+            client:visible
+            targetValue={m.value}
+            suffix={m.suffix}
+            label={m.label}
+            isMono={m.mono}
+            delay={i * 100}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="projetos" class="section">
+    <div class="container">
+      <!-- Header -->
+      <div class="mb-14">
+        <span class="section-label">projetos</span>
+        <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight">
+          O que eu <span class="gradient-text">construo</span>
+        </h2>
+        <p class="mt-4 text-base max-w-xl" style="color: var(--color-text-secondary);">
+          4 sistemas completos — cada um resolvendo um problema real de dados,
+          com stack moderna e deploy em produção.
+        </p>
+      </div>
+
+      <!-- Featured: Pipeline Simulator -->
+      <div class="card p-8 mb-10 relative overflow-hidden group cursor-pointer">
+        {/* Top accent line */}
+        <div class="absolute top-0 left-0 right-0 h-[2px]" style="background: linear-gradient(90deg, #00d4aa, #4488ff, #ff6b35);"></div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- Text -->
+          <div class="flex-1">
+            <div class="badge badge--available mb-4" style="width: fit-content;">
+              ⭐ projeto destaque
+            </div>
+            <h3 class="text-2xl font-bold mb-3">Simulador de Pipeline ETL com Fila + Idempotência</h3>
+            <p class="mb-2" style="color: var(--color-text-secondary);">
+              <strong style="color: var(--color-text-primary);">Problema:</strong> Pipelines de dados em produção falham silenciosamente —
+              sem visibilidade de estado, duplicidade não detectada, logs inexistentes.
+            </p>
+            <p class="mb-5" style="color: var(--color-text-secondary);">
+              <strong style="color: var(--color-text-primary);">Solução:</strong> Interface interativa que simula arquitetura real de fila + processor
+              + idempotência. Jobs com estados visíveis, deduplicação via hash,
+              log estruturado em tempo real e simulação de falhas configurável.
+            </p>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 mb-6">
+              {['JavaScript ES6+', 'FIFO Queue', 'Idempotência (Hash)', 'Event Bus', 'Structured Logging', 'Retry Pattern', 'ETL'].map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+
+            <!-- Features -->
+            <div class="grid md:grid-cols-2 gap-3 mb-6">
+              {[
+                'Fila FIFO com prioridade — max 3 workers simultâneos',
+                'Hash de idempotência bloqueia duplicados antes do processamento',
+                'Estados PENDENTE → PROCESSANDO → CONCLUÍDO / ERRO com timestamps',
+                'Log estruturado multi-nível: DEBUG, INFO, SUCCESS, WARNING, ERROR',
+                'Simulação de falhas configurável (0–50%)',
+                'Módulos separados: services / processors / validators — mentalidade de engenharia',
+              ].map(f => (
+                <div class="flex items-start gap-2 text-sm" style="color: var(--color-text-secondary);">
+                  <span style="color: var(--color-accent-green); font-family: var(--font-mono);">▹</span>
+                  {f}
+                </div>
+              ))}
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap gap-3">
+              <a href="/projects/pipeline-simulator" class="btn btn--primary">Abrir Demo →</a>
+              <a href="https://github.com/pedro-scarpatti" target="_blank" class="btn btn--ghost">Ver código</a>
+            </div>
+          </div>
+
+          <!-- Mini diagram preview (ASCII art in a box) -->
+          <div class="lg:w-72 flex-shrink-0">
+            <div class="rounded-lg p-4 font-mono text-xs leading-relaxed" style="background: var(--color-bg-surface); border: 1px solid var(--color-border); color: var(--color-text-secondary);">
+              <div class="mb-2" style="color: var(--color-accent-green);">// pipeline status</div>
+              <div class="flex justify-between mb-1">
+                <span>Queue depth</span>
+                <span style="color: var(--color-accent-green);">12</span>
+              </div>
+              <div class="flex justify-between mb-1">
+                <span>Processed</span>
+                <span style="color: var(--color-accent-green);">847</span>
+              </div>
+              <div class="flex justify-between mb-1">
+                <span>Failed</span>
+                <span style="color: var(--color-accent-orange);">3</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Workers</span>
+                <span style="color: var(--color-accent-blue);">3/3 active</span>
+              </div>
+              <div class="mt-3 pt-3" style="border-top: 1px solid var(--color-border);">
+                <div class="flex items-center gap-2">
+                  <span style="color: var(--color-accent-green);">●</span>
+                  <span>Pipeline running</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Grid -->
+      <div class="projects-grid">
+        {projects.map(p => (
+          <ProjectCard {...p} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="sobre" class="section">
+    <div class="container">
+      <div class="grid lg:grid-cols-2 gap-16 items-start">
+
+        <!-- Left: Text -->
+        <div>
+          <span class="section-label">sobre</span>
+          <h2 class="text-4xl font-extrabold tracking-tight mb-6">
+            Quem eu <span class="gradient-text">sou</span>
+          </h2>
+
+          <div class="space-y-4 text-base leading-relaxed" style="color: var(--color-text-secondary);">
+            <p>
+              Engenheiro de dados com atuação em <strong style="color: var(--color-text-primary);">produção na SESA/SUS</strong>,
+              onde desenvolvo sistemas internos que processam dados operacionais e
+              suportam decisões estratégicas. Trajetória: geoprocessamento → desenvolvimento web →
+              engenharia de dados — onde arquitetura de sistemas e análise de dados se encontram.
+            </p>
+            <p>
+              Especialidade: <strong style="color: var(--color-text-primary);">fechar o ciclo completo</strong>: extrair dados de
+              fontes diversas (CSV, DBF, APIs), transformar em pipelines robustos com validação e auditoria,
+              e disponibilizar através de dashboards operacionais e APIs. Entendo tanto o lado de dados
+              (SQL, ETL, índice reverso, embeddings) quanto o lado de produto (UX de dashboard,
+              arquitetura de filas, APIs REST).
+            </p>
+            <p>
+              <strong style="color: var(--color-text-primary);">Fluente em inglês (C2)</strong> — leio documentação, assisto talks,
+              trabalho com ferramentas gringas sem barreira. Sueco intermediário (B2).
+            </p>
+          </div>
+
+          <!-- Chips -->
+          <div class="flex flex-wrap gap-2 mt-8">
+            {['Python', 'SQL / PostgreSQL', 'ETL / Pipelines', 'Dashboards', 'Índice Reverso',
+              'OCR', 'React TS', 'FastAPI', 'Git', 'Inglês C2'].map(chip => (
+              <span class="px-3 py-1.5 rounded-full text-xs font-medium border" style="background: var(--color-bg-card); border-color: var(--color-border); color: var(--color-text-secondary);">
+                {chip}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <!-- Right: Metrics + Skills list -->
+        <div class="space-y-6">
+
+          <!-- Metrics cards -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="card p-5 text-center">
+              <div class="text-3xl font-black mb-1" style="background: linear-gradient(135deg, #00d4aa, #4488ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                2+
+              </div>
+              <div class="text-xs uppercase tracking-wider" style="color: var(--color-text-muted);">Anos em produção</div>
+            </div>
+            <div class="card p-5 text-center">
+              <div class="text-3xl font-black mb-1" style="background: linear-gradient(135deg, #00d4aa, #4488ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                SESA
+              </div>
+              <div class="text-xs uppercase tracking-wider" style="color: var(--color-text-muted);">Cliente atual</div>
+            </div>
+            <div class="card p-5 text-center">
+              <div class="text-3xl font-black mb-1" style="background: linear-gradient(135deg, #00d4aa, #4488ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                4
+              </div>
+              <div class="text-xs uppercase tracking-wider" style="color: var(--color-text-muted);">Projetos demonstráveis</div>
+            </div>
+            <div class="card p-5 text-center">
+              <div class="text-3xl font-black mb-1" style="background: linear-gradient(135deg, #00d4aa, #4488ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                C2
+              </div>
+              <div class="text-xs uppercase tracking-wider" style="color: var(--color-text-muted);">Inglês</div>
+            </div>
+          </div>
+
+          <!-- Experience -->
+          <div class="card p-6">
+            <h3 class="font-bold mb-4 text-sm uppercase tracking-wider" style="color: var(--color-accent-green);">
+              Experiência Principal
+            </h3>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between items-start mb-1">
+                  <span class="font-semibold text-sm">SESA/SUS — Espírito Santo</span>
+                  <span class="font-mono text-xs" style="color: var(--color-text-muted);">2022 → presente</span>
+                </div>
+                <div class="text-xs mb-2" style="color: var(--color-accent-green);">Engenharia de Dados · Sistemas de Informação em Saúde</div>
+                <ul class="space-y-1.5 text-xs" style="color: var(--color-text-secondary);">
+                  <li class="flex items-start gap-2">
+                    <span style="color: var(--color-accent-green);">→</span>
+                    Motor de busca híbrido (BM25 + embeddings) sobre 500k+ documentos — latência p99 &lt; 50ms
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span style="color: var(--color-accent-green);">→</span>
+                    Pipeline ETL processando 50k+ registros mensais de múltiplas fontes (CSV, DBF, API REST)
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span style="color: var(--color-accent-green);">→</span>
+                    Dashboards operacionais para 2.000+ profissionais em 81 unidades de saúde
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span style="color: var(--color-accent-green);">→</span>
+                    Stack: Python · PostgreSQL · FastAPI · React TS · Docker
+                  </li>
+                </ul>
+              </div>
+
+              <div style="border-top: 1px solid var(--color-border); padding-top: 12px; margin-top: 4px;">
+                <div class="flex justify-between items-start mb-1">
+                  <span class="font-semibold text-sm">GC Studios — Freelance</span>
+                  <span class="font-mono text-xs" style="color: var(--color-text-muted);">2024 → 2025</span>
+                </div>
+                <ul class="space-y-1.5 text-xs" style="color: var(--color-text-secondary);">
+                  <li class="flex items-start gap-2">
+                    <span style="color: var(--color-accent-blue);">→</span>
+                    Aplicações web sob demanda com FastAPI + React
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <span style="color: var(--color-accent-blue);">→</span>
+                    Boas práticas: TDD, SOLID, DDD
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STACK ── -->
+  <section id="stack" class="section">
+    <div class="container">
+      <div class="mb-14">
+        <span class="section-label">stack</span>
+        <h2 class="text-4xl font-extrabold tracking-tight">
+          Stack & <span class="gradient-text">Ferramentas</span>
+        </h2>
+        <p class="mt-4 text-base max-w-xl" style="color: var(--color-text-secondary);">
+          Barras sem porcentagens — rótulos contextuais comunicam mais que números.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        {skills.map(group => (
+          <div class="card p-6">
+            <h3 class="font-bold text-sm uppercase tracking-widest mb-5" style="color: var(--color-accent-green); padding-bottom: 12px; border-bottom: 1px solid var(--color-border);">
+              {group.category}
+            </h3>
+            <div class="space-y-5">
+              {group.items.map(skill => (
+                <SkillBar name={skill.name} level={skill.level} width={skill.width} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section id="contato" class="section">
+    <div class="container text-center">
+      <span class="section-label">contato</span>
+      <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight mb-6">
+        Vamos <span class="gradient-text">conversar</span>
+      </h2>
+
+      <p class="text-base max-w-lg mx-auto mb-12 leading-relaxed" style="color: var(--color-text-secondary);">
+        Procuro oportunidades em Data Engineering e ML Engineering.
+        Remoto internacional ou híbrido.
+        Se precisa de alguém que entende como pipeline, SQL, dashboards e
+        arquitetura de sistemas se conectam — chama.
+      </p>
+
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="mailto:scarpatti.pedro@gmail.com" class="btn btn--primary">
+          ✉ scarpatti.pedro@gmail.com
+        </a>
+        <a href="https://github.com/pedro-scarpatti" target="_blank" class="btn btn--ghost">
+          💻 github.com/pedro-scarpatti
+        </a>
+        <a href="https://linkedin.com/in/pedro-batista-2k99" target="_blank" class="btn btn--ghost">
+          💼 linkedin.com/in/pedro-batista-2k99
+        </a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+</style>
