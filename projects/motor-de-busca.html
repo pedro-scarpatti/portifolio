@@ -297,6 +297,9 @@
       flex: 1;
       overflow-y: auto;
       padding: 24px;
+      background: var(--bg3);
+      border-radius: 0 0 20px 20px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
     .results-empty {
       height: 100%;
@@ -863,10 +866,8 @@ function selectDoc(id) {
 }
 
 // Initial search hint
-doSearch();
 searchInput.value = 'índice reverso dados busca';
 doSearch();
-setTimeout(() => { searchInput.value = ''; doSearch(); }, 1500);
 </script>
 </body>
 </html>
