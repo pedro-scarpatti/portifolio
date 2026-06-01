@@ -774,7 +774,7 @@ const ROUTES = [
 
 function simulateRequest() {
   state.reqCount++;
-  state.rateUsed = Math.min(state.rateLimit, state.rateUsed + 1);
+  state.rateUsed++;
   const route = ROUTES[Math.floor(Math.random() * ROUTES.length)];
   const latency = route.latency + Math.floor(Math.random() * 20);
 
@@ -784,6 +784,7 @@ function simulateRequest() {
     state.errorCount++;
     animateRequest('rate');
     updateMetrics();
+    updateRateLimit();
     return;
   }
 

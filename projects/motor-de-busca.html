@@ -631,8 +631,10 @@ const CORPUS = [
 function tokenize(text) {
   return text
     .toLowerCase()
-    .replace(/[^\w\s]/g, ' ')
-    .split(/\s+/)
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+    .split(/\s+/u)
     .filter(t => t.length > 2 && !STOP_WORDS.has(t));
 }
 
@@ -670,20 +672,21 @@ function buildIndex(docs) {
 
   docs.forEach(doc => {
     const tokens = tokenize(doc.content + ' ' + doc.title);
-    const stems = [...new Set(tokens.map(stem))];
+    const termFreq = {};
+
+    tokens.forEach(token => {
+      const term = stem(token);
+      termFreq[term] = (termFreq[term] || 0) + 1;
+    });
+
     docLengths.push(tokens.length);
 
-    stems.forEach(term => {
+    Object.entries(termFreq).forEach(([term, tf]) => {
       if (!index[term]) {
         index[term] = { df: 0, postings: [] };
       }
-      const existing = index[term].postings.find(p => p.docId === doc.id);
-      if (existing) {
-        existing.tf++;
-      } else {
-        index[term].postings.push({ docId: doc.id, tf: 1 });
-        index[term].df++;
-      }
+      index[term].postings.push({ docId: doc.id, tf });
+      index[term].df++;
     });
   });
 
